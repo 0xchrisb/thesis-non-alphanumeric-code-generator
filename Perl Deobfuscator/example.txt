@@ -1,0 +1,34 @@
+perl deobfuscator.pl 
+
+Usage: deobfuscator.pl -s <Obfuscated code>
+
+This script transforms obfuscated perl code back using B::Deparse
+and analyses the code by using rules from ModSecurity.
+Configuration:
+		ModSecurity rules path: /etc/apache2/modsecurity2/
+
+
+=============================================================================
+
+
+perl deobfuscator.pl  -s "`cat testpayload.txt`"
+
+====================
+Payload
+====================
+$__=('-'^']').('-'^'_').(')'^'@').('@'^'.').(')'^']').' '.'`'.('>'^']').('['^':').(']'^')').' '.'/'.(';'^'^').(']'^')').('?'^'\\').'/'.('/'^'_').('['^':').('/'^'\\').('\\'^'/').(','^'[').('^'^':').'`'.';'.'';''=~('(?{'.('^'^';').('+'^']').('?'^'^').(','^'@').'($__)'.'})');.
+====================
+Deobfuscated
+====================
+$__ = 'print `cat /etc/passwd`;';
+'' =~ /(?{eval($__)})/;
+====================
+Matched RegEx
+====================
+(?:\b(?:\.(?:ht(?:access|passwd|group)|www_?acl)|global\.asa|httpd\.conf|boot\.ini)\b|\/etc\/)
+(?:\b(?:\.(?:ht(?:access|passwd|group)|www_?acl)|global\.asa|httpd\.conf|boot\.ini)\b|\/etc\/)
+(?:\b(?:(?:n(?:et(?:\b\W+?\blocalgroup|\.exe)|(?:map|c)\.exe)|t(?:racer(?:oute|t)|elnet\.exe|clsh8?|ftp)|(?:w(?:guest|sh)|rcmd|ftp)\.exe|echo\b\W*?\by+)\b|c(?:md(?:(?:32)?\.exe\b|\b\W*?\/c)|d(?:\b\W*?[\\\/]|\W*?\.\.)|hmod.{0,40}?\+.{0,3}x))|[\;\|\`]\W*?\b(?:(?:c(?:h(?:grp|mod|own|sh)|md|pp)|p(?:asswd|ython|erl|ing|s)|n(?:asm|map|c)|f(?:inger|tp)|(?:kil|mai)l|(?:xte)?rm|ls(?:of)?|telnet|uname|echo|id)\b|g(?:\+\+|cc\b))|\/(?:c(?:h(?:grp|mod|own|sh)|pp)|p(?:asswd|ython|erl|ing|s)|n(?:asm|map|c)|f(?:inger|tp)|(?:kil|mai)l|g(?:\+\+|cc)|(?:xte)?rm|ls(?:of)?|telnet|uname|echo|id)(?:[\'\"\|\;\`\-\s]|$))
+
+
+Total injections: 3
+====================
